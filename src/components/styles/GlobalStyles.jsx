@@ -6,13 +6,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    display: flex;
     margin: 0 auto;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: karla, sans-serif;
-    font-size: 50px;
+    font-family: 'Karla', sans-serif;
   }
 `
 export default GlobalStyle

@@ -6,15 +6,15 @@ import { useState } from 'react'
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  background-color: pink;
-  width: 50vh;
-  height: 50vh;
+  background-color: #F2F0F0;
+  width: 500px;
+  height: 210px;
   justify-content: center;
 
-    label {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   }
 `
 
