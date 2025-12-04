@@ -8,10 +8,14 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   background-color: #F2F0F0;
-  width: 500px;
-  height: 210px;
+  width: 100%;  
+  max-width: 600px;
+  min-height: 210px;
   justify-content: center;
-  margin: 32px 0;
+  margin-top: 32px;
+  border: 1px solid black;
+  padding: 20px;
+  box-shadow: 10px 10px black;
 
   label {
   display: flex;
@@ -19,9 +23,11 @@ const StyledForm = styled.form`
   gap: 8px;
   }
 `
-
 const StyledInput = styled.input`
+  display: flex;
   height: 50px;
+  font-size: 20px;
+  font-family: 'Karla', sans-serif;
 `
 
 export const InputBox = () => {
@@ -39,7 +45,7 @@ export const InputBox = () => {
   }
 
 return (
-  <div>
+  <>
   <StyledForm onSubmit={handleSubmit}>
     <label> What's making you happy right now?
       <StyledInput 
@@ -55,8 +61,7 @@ return (
   {posted.map((message, index) => (
     <OutputBox key={index}>{message}</OutputBox>
   ))} 
-
-  </div>
+  </>
   )
 }
 

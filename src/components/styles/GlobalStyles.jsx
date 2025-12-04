@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0 auto;
     font-family: 'Karla', sans-serif;
+    font-size: 20px;
   }
 `
 export default GlobalStyle
