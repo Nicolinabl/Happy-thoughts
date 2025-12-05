@@ -3,7 +3,7 @@ import styled from 'styled-components'
 const StyledButton = styled.button`
   display: flex;
   align-items: center;
-  background-color: #FFA9AB;
+  background-color: ${props => props.cta ? '#FFA9AB' : '#EAEAEA'};
   border-radius: 50px;
   width: fit-content;
   border: none;
@@ -13,14 +13,18 @@ const StyledButton = styled.button`
   &:hover {
   cursor: pointer;
   transform: scale(1.05);
+  background-color: #FFA9AB;
   }
 `
 
-export const Button = ({children, onClick}) => {
+export const Button = ({children, onClick, cta}) => {
   return (
     <StyledButton 
-    type="submit"
-    onClick={onClick}
-    >{children}</StyledButton>
+      type="submit"
+      onClick={onClick}
+      cta={cta}
+    >
+      {children}
+    </StyledButton>
   )
 }

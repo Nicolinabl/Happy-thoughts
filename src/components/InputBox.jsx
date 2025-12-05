@@ -40,7 +40,8 @@ export const InputBox = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    setPosted([...posted, value])
+    setPosted([...posted, value]) 
+    // ... spread operator to create a new array with the existing messages plus the new one
     setValue('')
   }
 
@@ -61,14 +62,9 @@ return (
   {posted.map((message, index) => (
     <OutputBox key={index}>{message}</OutputBox>
   ))} 
+  {/* Note to self: key is a special prop in React. it helps React identify which items in a list have changed, been added, or removed */}
   </>
   )
 }
 
-// chain of events:
-// 1. When input is changed, handleInput is called
-// 2. when handelInput is called, it updates the value state with setValue
-// 3. when the form is submitted, handleSubmit is called
-// 4. when handleSubmit is called, it prevents the default form submission behavior, adds the current value to the posted array using setPosted, and resets the value state to an empty string
-// 5. The component re-renders, displaying the updated list of posted messages below the form
-// 6. Each message in the posted array is rendered inside an OutputBox component
+
