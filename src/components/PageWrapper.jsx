@@ -1,4 +1,3 @@
-import {InputBox} from './InputBox'
 import { styled } from 'styled-components'
 
 const StyledMain = styled.main`
@@ -9,10 +8,8 @@ const StyledMain = styled.main`
   width: 100%;
 `
 
-export const PageWrapper = () => {
+export const PageWrapper = ({children}) => {
   return (
-    <StyledMain>
-      <InputBox />
-    </StyledMain>
+    <StyledMain>{children}</StyledMain>
   )
 }
