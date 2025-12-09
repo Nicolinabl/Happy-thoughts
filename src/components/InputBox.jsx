@@ -1,7 +1,7 @@
 import { HeartIcon } from './icons/HeartIcon'
 import { Button } from './Button'
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { OutputBox  } from './OutputBox'
 
 const StyledForm = styled.form`
@@ -38,10 +38,20 @@ export const InputBox = () => {
     setValue(e.target.value)
   }
 
+  // when submitting: post thought to API
   const handleSubmit = (e) => {
     e.preventDefault()
-    setPosted([...posted, value]) 
-    // ... spread operator to create a new array with the existing messages plus the new one
+
+    fetch('https://happy-thoughts-api-4ful.onrender.com/thoughts', {
+      method: 'POST',
+      body: JSON.stringify({message: value}),
+      headers: { 'Content-Type': 'application/json'},
+    })
+    .then(response => response.json())
+    .then(newPost => {
+      setPosted((posted) => [newPost, ...posted, value])
+    })
+
     setValue('')
   }
 
@@ -58,13 +68,11 @@ return (
 
     <Button><HeartIcon></HeartIcon>Send happy thought<HeartIcon></HeartIcon></Button>
   </StyledForm>
-
-  {posted.map((message, index) => (
-    <OutputBox key={index}>{message}</OutputBox>
-  ))} 
-  {/* Note to self: key is a special prop in React. it helps React identify which items in a list have changed, been added, or removed */}
   </>
   )
 }
 
-
+// Get and display messages from API
+  {/* {posted.map((message, index) => (
+    <OutputBox key={index}>{message}</OutputBox>
+  ))}  */}
