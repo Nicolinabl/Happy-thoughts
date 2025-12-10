@@ -44,8 +44,8 @@ export const OutputBox = ({children}) => {
 
       <StyledCounter>
         <Button 
-        cta={clicked}
-        onClick={handleClick}
+          cta={clicked}
+          onClick={handleClick}
         ><HeartIcon></HeartIcon></Button>
         <StyledParagraph>x {count}</StyledParagraph>
       </StyledCounter>

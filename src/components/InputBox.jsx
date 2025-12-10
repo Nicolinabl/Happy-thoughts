@@ -55,6 +55,21 @@ export const InputBox = () => {
     setValue('')
   }
 
+useEffect(() => {
+    const fetchMessages = () => {
+      fetch('https://happy-thoughts-api-4ful.onrender.com/thoughts')
+        .then((response) => response.json())
+        .then((data) => {
+          setPosted(data)
+
+          console.log(data)
+
+        })
+    }
+
+    fetchMessages()
+  }, ([]))
+
 return (
   <>
   <StyledForm onSubmit={handleSubmit}>
@@ -68,11 +83,14 @@ return (
 
     <Button><HeartIcon></HeartIcon>Send happy thought<HeartIcon></HeartIcon></Button>
   </StyledForm>
+
+  {posted.map((post) => {
+    return <OutputBox key={post._id}>{post.message}</OutputBox>
+          })}
+
   </>
-  )
+  ) 
 }
 
-// Get and display messages from API
-  {/* {posted.map((message, index) => (
-    <OutputBox key={index}>{message}</OutputBox>
-  ))}  */}
+
+
