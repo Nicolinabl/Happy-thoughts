@@ -68,6 +68,9 @@ useEffect(() => {
     }
 
     fetchMessages()
+
+    // Use interval here to refresh messages and likes every x seconds?
+
   }, ([]))
 
 return (
@@ -85,7 +88,7 @@ return (
   </StyledForm>
 
   {posted.map((post) => {
-    return <OutputBox key={post._id}>{post.message}</OutputBox>
+    return <OutputBox id={post._id} hearts={post.hearts} key={post._id}>{post.message}</OutputBox>
           })}
 
   </>

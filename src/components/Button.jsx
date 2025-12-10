@@ -22,7 +22,7 @@ export const Button = ({children, onClick, cta}) => {
     <StyledButton 
       type="submit"
       onClick={onClick}
-      cta={cta}
+      $cta={cta}
     >
       {children}
     </StyledButton>

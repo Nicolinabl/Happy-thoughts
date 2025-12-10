@@ -27,12 +27,26 @@ const StyledCounter = styled.div`
   display: flex;
 `
 
-export const OutputBox = ({children}) => {
-  const [count, setCount] = useState(0)
+// POST https://happy-thoughts-api-4ful.onrender.com/thoughts/THOUGHT_ID/like
+
+export const OutputBox = ({children, id, hearts}) => {
+  const [count, setCount] = useState(hearts)
   const [clicked, setClicked] = useState(false)
 
+  const postLike = () => {
+    fetch(`https://happy-thoughts-api-4ful.onrender.com/thoughts/${id}/like`, {
+      method: 'POST',
+      // body: JSON.stringify({hearts: count + 1}),
+      headers: { 'Content-Type': 'application/json'},
+    })
+    .then(response => response.json())
+    .then(json => {
+      setCount(json.hearts)
+    })
+  }
+
   const handleClick = () => {
-    setCount(count + 1)
+    postLike()
     setClicked(true)
   }
 
