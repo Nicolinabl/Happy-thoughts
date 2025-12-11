@@ -33,8 +33,14 @@ const StyledInput = styled.input`
 export const InputBox = () => {
   const [value, setValue] = useState('')
   const [posted, setPosted] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleInput = (e) => {
+    if(e.target.value.length > 140) {
+      setErrorMessage('Your message is too long friend! Max 140 characters allowed.')
+    } else {
+      setErrorMessage('')
+    }
     setValue(e.target.value)
   }
 
@@ -47,9 +53,10 @@ export const InputBox = () => {
       body: JSON.stringify({message: value}),
       headers: { 'Content-Type': 'application/json'},
     })
-    .then(response => response.json())
-    .then(newPost => {
-      setPosted((posted) => [newPost, ...posted, value])
+      .then(response => response.json())
+      .then(newPost => {
+
+      setPosted((posted) => [newPost, ...posted])
     })
 
     setValue('')
@@ -82,6 +89,7 @@ return (
         value={value} 
         onChange={handleInput}
       /> 
+      {errorMessage && <p style={{color: 'red'}}>{errorMessage}</p>}
     </label>
 
     <Button><HeartIcon></HeartIcon>Send happy thought<HeartIcon></HeartIcon></Button>

@@ -9,6 +9,7 @@ const StyledButton = styled.button`
   border: none;
   padding: 5px 15px;
   margin: 15px 0; 
+  gap: 10px;
 
   &:hover {
   cursor: pointer;

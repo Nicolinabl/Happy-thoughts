@@ -7,7 +7,7 @@ import { useState } from 'react';
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #F2F0F0;
+  background-color: #FFFFFF;
   width: 100%;  
   max-width: 600px;
   min-height: 190px;
