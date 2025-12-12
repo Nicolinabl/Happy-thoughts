@@ -8,7 +8,6 @@ export const App = () => {
       <GlobalStyle />
       <PageWrapper>
         <InputBox />
-        {/* OutputBox here */}
       </PageWrapper>
     </>
   )

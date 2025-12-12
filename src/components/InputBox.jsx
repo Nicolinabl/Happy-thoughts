@@ -7,14 +7,14 @@ import { OutputBox  } from './OutputBox'
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  background-color: #F2F0F0;
-  width: 100%;  
-  max-width: 600px;
+  background-color: var(--secondary-color);
+  width: 90%;           /* responsive width */
+  max-width: 600px;     /* cap width */
   min-height: 210px;
   justify-content: center;
-  margin-top: 32px;
+  margin: 32px auto 0 auto; /* centers horizontally */
   border: 1px solid black;
-  padding: 20px;
+  padding: 20px 20px 0 20px;
   box-shadow: 10px 10px black;
 
   label {
@@ -92,7 +92,7 @@ return (
       {errorMessage && <p style={{color: 'red'}}>{errorMessage}</p>}
     </label>
 
-    <Button><HeartIcon></HeartIcon>Send happy thought<HeartIcon></HeartIcon></Button>
+    <Button style={{backgroundColor: 'var(--accent-color)'}}><HeartIcon></HeartIcon>Send happy thought<HeartIcon></HeartIcon></Button>
   </StyledForm>
 
   {posted.map((post) => {
