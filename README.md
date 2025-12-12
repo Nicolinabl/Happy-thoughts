@@ -2,7 +2,9 @@
 
 A site for sharing and liking thoughts. Users can submit their thoughts, see them displayed in real-time, and show appreciation by liking other users’ thoughts. All posts and likes are connected to an API. If message is too long or short an warning text appears and submit button is disabled.
 
-Check it out live at happy-thoughts-nicolina.netlify.app
+Check it out live at
+
+https://happy-thoughts-nicolina.netlify.app/
 
 ## Tech
 
