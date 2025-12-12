@@ -3,12 +3,13 @@ import styled from 'styled-components'
 const StyledButton = styled.button`
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: ${props => props.$cta ? 'var(--accent-color)' : 'var(--secondary-color)'};
   border-radius: 50px;
   width: fit-content;
   border: none;
   padding: 10px 10px;
-  margin: 20px 0 0 0;; 
+  margin: 20px 0; 
   gap: 10px;
 
   &:hover {

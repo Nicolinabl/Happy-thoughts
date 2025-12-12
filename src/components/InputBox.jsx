@@ -8,11 +8,11 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   background-color: var(--secondary-color);
-  width: 90%;           /* responsive width */
-  max-width: 600px;     /* cap width */
+  width: 90%;     
+  max-width: 600px;   
   min-height: 210px;
   justify-content: center;
-  margin: 32px auto 0 auto; /* centers horizontally */
+  margin: 32px auto 0 auto; 
   border: 1px solid black;
   padding: 20px 20px 0 20px;
   box-shadow: 10px 10px black;
@@ -37,7 +37,7 @@ export const InputBox = () => {
 
   const handleInput = (e) => {
     if(e.target.value.length > 140) {
-      setErrorMessage('Your message is too long friend! Max 140 characters allowed.')
+      setErrorMessage('Message must be between 5 and 140 characters long')
     } else {
       setErrorMessage('')
     }
@@ -47,6 +47,11 @@ export const InputBox = () => {
   // when submitting: post thought to API
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    if (value.length < 5 || value.length > 140) {
+      setErrorMessage('Message must be between 5 and 140 characters long!')
+      return
+    }
 
     fetch('https://happy-thoughts-api-4ful.onrender.com/thoughts', {
       method: 'POST',
@@ -60,6 +65,7 @@ export const InputBox = () => {
     })
 
     setValue('')
+    setErrorMessage('')
   }
 
 useEffect(() => {
@@ -76,8 +82,6 @@ useEffect(() => {
 
     fetchMessages()
 
-    // Use interval here to refresh messages and likes every x seconds?
-
   }, ([]))
 
 return (
@@ -89,14 +93,20 @@ return (
         value={value} 
         onChange={handleInput}
       /> 
-      {errorMessage && <p style={{color: 'red'}}>{errorMessage}</p>}
+      {errorMessage && <p style={{color: 'red', fontSize: '16px', marginBottom: '0'}}>{errorMessage}</p>}
     </label>
 
-    <Button style={{backgroundColor: 'var(--accent-color)'}}><HeartIcon></HeartIcon>Send happy thought<HeartIcon></HeartIcon></Button>
+    <Button 
+      style={{backgroundColor: 'var(--accent-color)'}}
+      disabled={value.length < 5 || value.length > 140}
+      >
+        <HeartIcon/>Send happy thought<HeartIcon/>
+    </Button>
+
   </StyledForm>
 
   {posted.map((post) => {
-    return <OutputBox id={post._id} hearts={post.hearts} key={post._id}>{post.message}</OutputBox>
+    return <OutputBox id={post._id} hearts={post.hearts} key={post._id} timeAgo={post.createdAt}>{post.message}</OutputBox>
           })}
 
   </>
