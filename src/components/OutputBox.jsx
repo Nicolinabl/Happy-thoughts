@@ -48,8 +48,10 @@ export const OutputBox = ({children, id, hearts, timeAgo}) => {
   const [clicked, setClicked] = useState(false)
   const [timeSincePost, setTimeSincePost] = useState(moment(timeAgo).fromNow())
 
+
+  // https://happy-thoughts-api-4ful.onrender.com/thoughts/${id}/like
   const postLike = () => {
-    fetch(`https://happy-thoughts-api-4ful.onrender.com/thoughts/${id}/like`, {
+    fetch(`https://happy-thoughts-api-nicolina.onrender.com/messages/${id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
     })

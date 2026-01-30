@@ -53,7 +53,7 @@ export const InputBox = () => {
       return
     }
 
-    fetch('https://happy-thoughts-api-4ful.onrender.com/thoughts', {
+    fetch('https://happy-thoughts-api-nicolina.onrender.com/messages', {
       method: 'POST',
       body: JSON.stringify({message: value}),
       headers: { 'Content-Type': 'application/json'},
@@ -70,7 +70,7 @@ export const InputBox = () => {
 
 useEffect(() => {
     const fetchMessages = () => {
-      fetch('https://happy-thoughts-api-4ful.onrender.com/thoughts')
+      fetch('https://happy-thoughts-api-nicolina.onrender.com/messages')
         .then((response) => response.json())
         .then((data) => {
           setPosted(data)
