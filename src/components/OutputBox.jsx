@@ -2,8 +2,78 @@ import styled from 'styled-components'
 import { Button } from './Button'
 import { HeartIcon } from './icons/HeartIcon'
 import React from 'react'
-import { useState, useEffect } from 'react';
-import moment from 'moment';
+import { useState, useEffect } from 'react'
+import moment from 'moment'
+import { DeleteIcon } from './icons/DeleteIcon'
+import { EditIcon } from './icons/EditIcon'
+
+export const OutputBox = ({children, id, hearts, timeAgo, onDelete}) => {
+  const [count, setCount] = useState(hearts)
+  const [clicked, setClicked] = useState(false)
+  // const [timeSincePost, setTimeSincePost] = useState(moment(timeAgo).fromNow())
+  const [now, setNow] = useState(Date.now()) 
+
+  const postLike = () => {
+    fetch(`https://happy-thoughts-api-nicolina.onrender.com/messages/${id}/like`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json'},
+    })
+    .then(response => response.json())
+    .then(json => {
+      setCount(json.hearts)
+    })
+  }
+
+  const handleClick = () => {
+    postLike()
+    setClicked(true)
+  }
+
+  const deleteTask = () => {
+    fetch(`https://happy-thoughts-api-nicolina.onrender.com/messages/${id}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        onDelete(id)
+      })
+  }
+
+  // const updateMessage = () => {
+
+  // }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now())
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [timeAgo])
+
+  return (
+    <StyledDiv>
+        <p>{children}</p>
+
+      <BottomRow>
+        <ButtonContainer>
+          <Button 
+            cta={clicked}
+            onClick={handleClick}>
+            <HeartIcon />
+          </Button>
+        </ButtonContainer>
+
+        <StyledBottomDiv>
+          <StyledParagraph>x {count}</StyledParagraph>
+          <StyledSpan>
+            <StyledParagraph>Posted {moment(timeAgo).from(now)}</StyledParagraph>
+            <StyledButton onClick={deleteTask}><DeleteIcon /></StyledButton>
+            <StyledButton><EditIcon /></StyledButton>
+          </StyledSpan>
+        </StyledBottomDiv>
+      </BottomRow>
+    </StyledDiv>
+  )
+}
 
 const StyledDiv = styled.div`
   display: flex;
@@ -42,56 +112,16 @@ const StyledBottomDiv = styled.div`
   gap: 10px;
   width: 100%;
   `
+const StyledButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
 
-export const OutputBox = ({children, id, hearts, timeAgo}) => {
-  const [count, setCount] = useState(hearts)
-  const [clicked, setClicked] = useState(false)
-  const [timeSincePost, setTimeSincePost] = useState(moment(timeAgo).fromNow())
-
-
-  // https://happy-thoughts-api-4ful.onrender.com/thoughts/${id}/like
-  const postLike = () => {
-    fetch(`https://happy-thoughts-api-nicolina.onrender.com/messages/${id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-    })
-    .then(response => response.json())
-    .then(json => {
-      setCount(json.hearts)
-    })
+  &:hover {
+    transform: scale(1.3);
   }
+`
 
-  const handleClick = () => {
-    postLike()
-    setClicked(true)
-  }
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeSincePost(moment(timeAgo).fromNow())
-    }, 30000)
-
-    return () => clearInterval(interval)
-  }, [timeAgo])
-
-  return (
-    <StyledDiv>
-        <p>{children}</p>
-
-      <BottomRow>
-        <ButtonContainer>
-          <Button 
-            cta={clicked}
-            onClick={handleClick}>
-            <HeartIcon />
-          </Button>
-        </ButtonContainer>
-
-        <StyledBottomDiv>
-          <StyledParagraph>x {count}</StyledParagraph>
-          <StyledParagraph>{timeSincePost}</StyledParagraph>
-        </StyledBottomDiv>
-      </BottomRow>
-    </StyledDiv>
-  )
-}
+const StyledSpan = styled.span`
+  display: flex;
+`

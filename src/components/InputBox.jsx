@@ -4,32 +4,6 @@ import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import { OutputBox  } from './OutputBox'
 
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  background-color: var(--secondary-color);
-  width: 90%;     
-  max-width: 600px;   
-  min-height: 210px;
-  justify-content: center;
-  margin: 32px auto 0 auto; 
-  border: 1px solid black;
-  padding: 20px 20px 0 20px;
-  box-shadow: 10px 10px black;
-
-  label {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  }
-`
-const StyledInput = styled.input`
-  display: flex;
-  height: 50px;
-  font-size: 20px;
-  font-family: 'Karla', sans-serif;
-`
-
 export const InputBox = () => {
   const [value, setValue] = useState('')
   const [posted, setPosted] = useState([])
@@ -82,7 +56,11 @@ useEffect(() => {
 
     fetchMessages()
 
-  }, ([]))
+  }, [])
+
+const handleDelete = (id) => {
+  setPosted(prev => prev.filter(post => post._id !==id))
+}
 
 return (
   <>
@@ -106,12 +84,37 @@ return (
   </StyledForm>
 
   {posted.map((post) => {
-    return <OutputBox id={post._id} hearts={post.hearts} key={post._id} timeAgo={post.createdAt}>{post.message}</OutputBox>
+    return <OutputBox id={post._id} hearts={post.hearts} key={post._id} timeAgo={post.createdAt} onDelete={handleDelete}>{post.message}</OutputBox>
           })}
-
   </>
   ) 
 }
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  background-color: var(--secondary-color);
+  width: 90%;     
+  max-width: 600px;   
+  min-height: 210px;
+  justify-content: center;
+  margin: 32px auto 0 auto; 
+  border: 1px solid black;
+  padding: 20px 20px 0 20px;
+  box-shadow: 10px 10px black;
+
+  label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  }
+`
+const StyledInput = styled.input`
+  display: flex;
+  height: 50px;
+  font-size: 20px;
+  font-family: 'Karla', sans-serif;
+`
 
 
 
