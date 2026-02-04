@@ -3,6 +3,8 @@ import { Button } from './Button'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import { OutputBox  } from './OutputBox'
+import { LoginButton } from './LoginButton'
+import { Link } from 'react-router-dom'
 
 export const InputBox = () => {
   const [value, setValue] = useState('')
@@ -21,6 +23,8 @@ export const InputBox = () => {
   // when submitting: post thought to API
   const handleSubmit = (e) => {
     e.preventDefault()
+    const user = { accessToken: 'accessToken is here' }
+  // TODO^^ from local storage
 
     if (value.length < 5 || value.length > 140) {
       setErrorMessage('Message must be between 5 and 140 characters long!')
@@ -30,7 +34,10 @@ export const InputBox = () => {
     fetch('https://happy-thoughts-api-nicolina.onrender.com/messages', {
       method: 'POST',
       body: JSON.stringify({message: value}),
-      headers: { 'Content-Type': 'application/json'},
+      headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.accessToken}`
+        },
     })
       .then(response => response.json())
       .then(newPost => {
@@ -64,6 +71,7 @@ const handleDelete = (id) => {
 
 return (
   <>
+  <Link to ={`/login`}><LoginButton /></Link>
   <StyledForm onSubmit={handleSubmit}>
     <label> What's making you happy right now?
       <StyledInput 
