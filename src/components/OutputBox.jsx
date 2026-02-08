@@ -7,10 +7,11 @@ import moment from 'moment'
 import { DeleteIcon } from './icons/DeleteIcon'
 import { EditIcon } from './icons/EditIcon'
 
-export const OutputBox = ({children, id, hearts, timeAgo, onDelete}) => {
+export const OutputBox = ({children, id, hearts, timeAgo, onDelete, onEdit}) => {
   const [count, setCount] = useState(hearts)
   const [clicked, setClicked] = useState(false)
-  // const [timeSincePost, setTimeSincePost] = useState(moment(timeAgo).fromNow())
+  const [isEditing, setIsEditing] = useState(false)
+  const [editValue, setEditValue] = useState(children)
   const [now, setNow] = useState(Date.now()) 
 
   const postLike = () => {
@@ -30,17 +31,40 @@ export const OutputBox = ({children, id, hearts, timeAgo, onDelete}) => {
   }
 
   const deleteTask = () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if (!user) {
+      alert('You must be logged in to delete your thought')
+      return
+    }
+
     fetch(`https://happy-thoughts-api-nicolina.onrender.com/messages/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${user?.accessToken}`
+      }
     })
-      .then(() => {
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Not allowed')
+        }
         onDelete(id)
       })
-  }
+      .catch(() => {
+        alert('You are not allowed to delete this thought')
+      })
+    }
+  
 
-  // const updateMessage = () => {
-
-  // }
+    const saveEdit = () => {
+      if (editValue.length < 5 || editValue.length > 140) {
+        alert("Message must be between 5 and 140 characters")
+        return
+      }
+    
+      onEdit(id, editValue)
+      setIsEditing(false)
+    }
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,7 +75,15 @@ export const OutputBox = ({children, id, hearts, timeAgo, onDelete}) => {
 
   return (
     <StyledDiv>
+      {isEditing ? (
+        <input
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          style={{ height: "40px", fontSize: "16px" }}
+        />
+      ) : (
         <p>{children}</p>
+      )}
 
       <BottomRow>
         <ButtonContainer>
@@ -64,10 +96,25 @@ export const OutputBox = ({children, id, hearts, timeAgo, onDelete}) => {
 
         <StyledBottomDiv>
           <StyledParagraph>x {count}</StyledParagraph>
+
           <StyledSpan>
-            <StyledParagraph>Posted {moment(timeAgo).from(now)}</StyledParagraph>
-            <StyledButton onClick={deleteTask}><DeleteIcon /></StyledButton>
-            <StyledButton><EditIcon /></StyledButton>
+            <StyledParagraph>
+              Posted {moment(timeAgo).from(now)}
+            </StyledParagraph>
+
+            <StyledButton onClick={deleteTask}>
+              <DeleteIcon />
+            </StyledButton>
+
+            {isEditing ? (
+              <StyledButton onClick={saveEdit}>
+                Save
+              </StyledButton>
+          ) : (
+            <StyledButton onClick={() => setIsEditing(true)}>
+              <EditIcon />
+            </StyledButton>
+)}
           </StyledSpan>
         </StyledBottomDiv>
       </BottomRow>

@@ -3,17 +3,18 @@ import { Button } from './Button'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import { OutputBox  } from './OutputBox'
-import { LoginButton } from './LoginButton'
 import { Link } from 'react-router-dom'
 
-export const InputBox = () => {
+export const InputBox = ({ user, onLogout }) => {
   const [value, setValue] = useState('')
   const [posted, setPosted] = useState([])
   const [errorMessage, setErrorMessage] = useState('')
 
   const handleInput = (e) => {
+
     if(e.target.value.length > 140) {
       setErrorMessage('Message must be between 5 and 140 characters long')
+
     } else {
       setErrorMessage('')
     }
@@ -23,8 +24,8 @@ export const InputBox = () => {
   // when submitting: post thought to API
   const handleSubmit = (e) => {
     e.preventDefault()
-    const user = { accessToken: 'accessToken is here' }
-  // TODO^^ from local storage
+
+    const user = JSON.parse(localStorage.getItem('user'))
 
     if (value.length < 5 || value.length > 140) {
       setErrorMessage('Message must be between 5 and 140 characters long!')
@@ -36,7 +37,7 @@ export const InputBox = () => {
       body: JSON.stringify({message: value}),
       headers: { 
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`
+        Authorization: `Bearer ${user?.accessToken}`
         },
     })
       .then(response => response.json())
@@ -62,16 +63,43 @@ useEffect(() => {
     }
 
     fetchMessages()
-
   }, [])
 
 const handleDelete = (id) => {
   setPosted(prev => prev.filter(post => post._id !==id))
 }
 
+const handleEdit = async (id, newMessage) => {
+  const user = JSON.parse(localStorage.getItem("user"))
+
+  const response = await fetch(
+    `https://happy-thoughts-api-nicolina.onrender.com/messages/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.accessToken}`,
+      },
+      body: JSON.stringify({ message: newMessage }),
+    }
+  )
+
+  const updatedMessage = await response.json()
+
+  setPosted((prev) =>
+    prev.map((post) =>
+      post._id === id ? updatedMessage : post
+    )
+  )
+}
+
 return (
   <>
-  <Link to ={`/login`}><LoginButton /></Link>
+  <Div>
+    <StyledLink to ={`/login`}><Button>Log in</Button></StyledLink>
+    <Button onClick={onLogout}>Log out</Button>
+  </Div>
+
   <StyledForm onSubmit={handleSubmit}>
     <label> What's making you happy right now?
       <StyledInput 
@@ -86,13 +114,21 @@ return (
       style={{backgroundColor: 'var(--accent-color)'}}
       disabled={value.length < 5 || value.length > 140}
       >
-        <HeartIcon/>Send happy thought<HeartIcon/>
+      <HeartIcon/>Send happy thought<HeartIcon/>
     </Button>
 
   </StyledForm>
 
   {posted.map((post) => {
-    return <OutputBox id={post._id} hearts={post.hearts} key={post._id} timeAgo={post.createdAt} onDelete={handleDelete}>{post.message}</OutputBox>
+    return <OutputBox 
+    id={post._id} 
+    hearts={post.hearts} 
+    key={post._id} 
+    timeAgo={post.createdAt} 
+    onDelete={handleDelete} 
+    onEdit={handleEdit}>
+      {post.message}
+      </OutputBox>
           })}
   </>
   ) 
@@ -124,5 +160,16 @@ const StyledInput = styled.input`
   font-family: 'Karla', sans-serif;
 `
 
+const Div = styled.div`
+  display: flex;
+  width: 90%;     
+  max-width: 600px; 
+  justify-content: center;
+  gap: 40px;
+`
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`
 
+// TODO edit error message styling when not being able to post logged out

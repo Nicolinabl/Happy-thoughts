@@ -4,7 +4,7 @@ import { InputBox } from './components/InputBox.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { LoginForm } from './components/LoginForm.jsx'
 import { SignUpForm } from './components/SignUpForm.jsx'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 
 export const App = () => {
@@ -13,16 +13,35 @@ export const App = () => {
   const handleLogin = (userData) => {
     setUser(userData)
     console.log('Logged in user:', userData)
-    // save user to local storage
+    localStorage.setItem('user', JSON.stringify(userData))
   }
+
+  const handleLogout = () => {
+    setUser(null)
+    localStorage.removeItem('user')
+  }
+
+  useEffect(() => {
+    // fetchMessages()
+
+    const userFromStorage = localStorage.getItem('user')
+
+    if (userFromStorage) {
+      setUser(JSON.parse(userFromStorage))
+    }
+  }, [])
+
 
   return (
     <>  
       <GlobalStyle />
       <PageWrapper>
         <BrowserRouter>
+
+          {user && <p>Welcome, {user.email}</p>}
+
           <Routes>
-            <Route path='/' element={<InputBox />}></Route>
+            <Route path='/' element={<InputBox user={user} onLogout={handleLogout}/>}></Route>
             <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}></Route>
             <Route path='/signup' element={<SignUpForm handleLogin={handleLogin}/>}></Route>
           </Routes>
